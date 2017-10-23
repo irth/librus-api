@@ -1,9 +1,10 @@
 import json
 from flask import Flask, request, abort
+from flask_cors import CORS
 from librus import librus
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route("/")
 def hello():
@@ -12,8 +13,9 @@ def hello():
 
 @app.route("/auth", methods=['POST'])
 def auth():
-    login = request.form['login']
-    password = request.form['password']
+    data = request.get_json()
+    login = data['login']
+    password = data['password']
 
     result = librus.Librus(login, password).login()
     if result is None:
